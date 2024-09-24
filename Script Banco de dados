@@ -1,0 +1,94 @@
+CREATE DATABASE restaurante;
+USE restaurante;
+
+
+CREATE TABLE Cardapio (
+    ID_itens INT PRIMARY KEY,
+    Categoria_item VARCHAR(20),
+    Descricao_item VARCHAR(200),
+    Preco_item DOUBLE,
+    Nome_item VARCHAR(50)
+);
+
+select * from pedido;
+INSERT INTO Cardapio (ID_itens, Categoria_item, Descricao_item, Preco_item, Nome_item) VALUES
+-- Bebidas
+(1, 'Bebida', 'Refrigerante lata', 5.50, 'Coca-Cola'),
+(2, 'Bebida', 'Refrigerante lata', 5.50, 'Guaraná Antarctica'),
+(3, 'Bebida', 'Suco natural', 6.00, 'Suco de Laranja'),
+(4, 'Bebida', 'Suco natural', 6.00, 'Suco de Uva'),
+(5, 'Bebida', 'Água com gás', 4.00, 'Água com Gás'),
+(6, 'Bebida', 'Água sem gás', 3.50, 'Água Mineral'),
+
+-- Comidas
+(7, 'Comida', 'Hambúrguer de carne bovina com queijo', 15.00, 'Hambúrguer Clássico'),
+(8, 'Comida', 'Pizza de queijo com borda recheada', 25.00, 'Pizza de Queijo'),
+(9, 'Comida', 'Pizza de calabresa com cebola', 28.00, 'Pizza de Calabresa'),
+(10, 'Comida', 'Prato de arroz, feijão e bife acebolado', 20.00, 'Prato Executivo'),
+(11, 'Comida', 'Macarrão ao molho de tomate', 18.00, 'Espaguete ao Sugo'),
+(12, 'Comida', 'Batata frita grande', 10.00, 'Batata Frita'),
+
+-- Sobremesas
+(13, 'Sobremesa', 'Torta de limão', 7.00, 'Torta de Limão'),
+(14, 'Sobremesa', 'Pudim de leite condensado', 8.50, 'Pudim de Leite'),
+(15, 'Sobremesa', 'Sorvete de chocolate com cobertura', 6.50, 'Sorvete de Chocolate'),
+(16, 'Sobremesa', 'Brownie com sorvete de creme', 10.00, 'Brownie com Sorvete');
+
+
+CREATE TABLE Cliente (
+    ID_cliente INT PRIMARY KEY,
+    Nome VARCHAR(50)
+);
+
+CREATE TABLE Restaurante (
+    ID_restaurante INT PRIMARY KEY,
+    Nome_dono VARCHAR(50),
+    Contato VARCHAR(20)
+);
+
+INSERT INTO Restaurante (ID_restaurante, Nome_dono, Contato) VALUES
+(1, 'Ana Pereira', '9888-5678');
+
+CREATE TABLE Mesa (
+    ID_mesa INT PRIMARY KEY,
+    fk_Restaurante_ID_restaurante INT,
+    FOREIGN KEY (fk_Restaurante_ID_restaurante) REFERENCES Restaurante(ID_restaurante)
+);
+
+
+
+CREATE TABLE Pedido (
+    ID_pedido INT PRIMARY KEY,
+    fk_Mesa_ID_mesa INT,
+    fk_Cliente_ID_cliente INT,
+    FOREIGN KEY (fk_Mesa_ID_mesa) REFERENCES Mesa(ID_mesa) ON DELETE CASCADE,
+    FOREIGN KEY (fk_Cliente_ID_cliente) REFERENCES Cliente(ID_cliente) ON DELETE RESTRICT
+);
+
+
+CREATE TABLE Comanda (
+    fk_Cardapio_ID_itens INT,
+    fk_Pedido_ID_pedido INT,
+    PRIMARY KEY (fk_Cardapio_ID_itens, fk_Pedido_ID_pedido),
+    FOREIGN KEY (fk_Cardapio_ID_itens) REFERENCES Cardapio(ID_itens),
+    FOREIGN KEY (fk_Pedido_ID_pedido) REFERENCES Pedido(ID_pedido)
+);
+
+
+
+
+CREATE TABLE Faturamento (
+    ID_faturamento INT PRIMARY KEY AUTO_INCREMENT,
+    Valor DOUBLE
+);
+
+
+CREATE TABLE Funcionario (
+    nome VARCHAR(50),
+    contato VARCHAR(50),
+    ID_funcionario INT PRIMARY KEY,
+    fk_Faturamento_Restaurante_ID_faturamento INT,
+    fk_Faturamento_Restaurante_ID_restaurante INT,
+    FOREIGN KEY (fk_Faturamento_Restaurante_ID_faturamento) REFERENCES Faturamento(ID_faturamento),
+    FOREIGN KEY (fk_Faturamento_Restaurante_ID_restaurante) REFERENCES Restaurante(ID_restaurante)
+);
