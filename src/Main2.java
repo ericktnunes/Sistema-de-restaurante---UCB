@@ -57,21 +57,24 @@ public class Main2 {
                     int comanda = 1;
 
                     //SQL para pegar último id da comanda para ir incrementando se cliente fechar o programa e fizer outra comanda
-                    String sqlUltimaComanda = "SELECT MAX(ID_Comanda) AS lastComanda FROM comanda;";
+                    String sqlUltimaComanda = "SELECT MAX(ID_Comanda) AS ultimaComanda FROM comanda;";
                     PreparedStatement stmtUltimaComanda = conn.conectarBancoDeDados().prepareStatement(sqlUltimaComanda);
                     ResultSet rsUltimaComanda = stmtUltimaComanda.executeQuery();
 
+                    //Aqui ele vai verificar ss existe uma ultima comanda
                     if (rsUltimaComanda.next()) {
-                        comanda = rsUltimaComanda.getInt("lastComanda") + 1; // Incrementa o último ID_Comanda
+                        //se tiver uma última comanda, ele vai pegar a ultima comanda com a query do sql
+                        //e incrementar com 1, formando uma nova comanda
+                        comanda = rsUltimaComanda.getInt("ultimaComanda") + 1; // Incrementa o último ID_Comanda
                     } else {
-                        comanda = 1; // Se não houver nenhum, começa com 1
+                        comanda = 1; // Se não houver nenhuma comanda, começa com 1
                     }
 
                     do {
                         System.out.println("Digite o item do cardápio que deseja inserir: ");
                         int num = leitura.nextInt();
 
-                        //SQL para pegar faturamento
+                        //SQL para consultar faturamento
                         String sqlFaturamento = "select * from cardapio where ID_itens = ?";
                         PreparedStatement stmtFaturamento = conn.conectarBancoDeDados().prepareStatement(sqlFaturamento);
                         stmtFaturamento.setInt(1, num);
@@ -94,7 +97,7 @@ public class Main2 {
                         PreparedStatement smtm2 = conn.conectarBancoDeDados().prepareStatement(sql2);
                         smtm2.setInt(1, comanda); // Definindo ID da comanda
                         smtm2.setInt(2, 1); // Definindo ID da mesa como 1
-                        smtm2.setObject(3, precoFatura); // Valor fictício de faturamento
+                        smtm2.setDouble(3, precoFatura); //Definindo o faturamento do item pedido
                         smtm2.setInt(4, num); // Número do item escolhido
 
                         //SQL para pegar último ID do pedido
@@ -109,10 +112,12 @@ public class Main2 {
                             ultimoPedido = 1;
                         }
 
-                        smtm2.setInt(5, ultimoPedido); // Definindo o ID do pedido como 4 (modifique conforme necessário)
+                        smtm2.setInt(5, ultimoPedido); // Definindo o ID do pedido como o ultimo ID do banco de dados
+
                         smtm2.execute();
 
 
+                        //Pergurtando se o cliente deseja adicionar mais um item na sua comanda
                         System.out.println("Deseja adicionar mais um pedido? (SIM/ NAO)");
                         leitura.nextLine();
                         opcao1 = leitura.nextLine();
@@ -123,6 +128,11 @@ public class Main2 {
                         }
 
                     } while (opcao1.equalsIgnoreCase("sim"));
+
+                //caso nenhuma opções do switch
+                default:
+                    System.out.println("Digite um número válido");
+                    break;
             }
 
         } while (opcao != 4);
