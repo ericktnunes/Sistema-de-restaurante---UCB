@@ -71,6 +71,18 @@ public class Main2 {
                         System.out.println("Digite o item do cardápio que deseja inserir: ");
                         int num = leitura.nextInt();
 
+                        //SQL para pegar faturamento
+                        String sqlFaturamento = "select * from cardapio where ID_itens = ?";
+                        PreparedStatement stmtFaturamento = conn.conectarBancoDeDados().prepareStatement(sqlFaturamento);
+                        stmtFaturamento.setInt(1, num);
+                        stmtFaturamento.execute();
+                        ResultSet rsFaturamento = stmtFaturamento.executeQuery();
+                        double precoFatura = 0.0;
+
+                        if (rsFaturamento.next()) {
+                            precoFatura = rsFaturamento.getDouble("Preco_item");
+                        }
+
                         //SQL para inserir pedido
                         sql = "insert into pedido (fk_Cliente_ID_cliente) values (?)";
                         smtm = conn.conectarBancoDeDados().prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS);
@@ -82,7 +94,7 @@ public class Main2 {
                         PreparedStatement smtm2 = conn.conectarBancoDeDados().prepareStatement(sql2);
                         smtm2.setInt(1, comanda); // Definindo ID da comanda
                         smtm2.setInt(2, 1); // Definindo ID da mesa como 1
-                        smtm2.setInt(3, 500); // Valor fictício de faturamento
+                        smtm2.setObject(3, precoFatura); // Valor fictício de faturamento
                         smtm2.setInt(4, num); // Número do item escolhido
 
                         //SQL para pegar último ID do pedido
