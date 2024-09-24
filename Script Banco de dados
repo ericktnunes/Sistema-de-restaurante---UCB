@@ -2,7 +2,7 @@ CREATE DATABASE Restaurante;
 USE Restaurante;
 
 CREATE TABLE Cardapio (
-    ID_itens int PRIMARY KEY,
+    ID_itens int AUTO_INCREMENT PRIMARY KEY,
     Categoria_item varchar(20),
     Descricao_item varchar(200),
     Preco_item double,
@@ -34,23 +34,23 @@ INSERT INTO Cardapio (ID_itens, Categoria_item, Descricao_item, Preco_item, Nome
 
 
 CREATE TABLE Cliente (
-    ID_cliente int PRIMARY KEY,
+    ID_cliente int  AUTO_INCREMENT PRIMARY KEY,
     Nome varchar(50)
 );
 
 CREATE TABLE Pedido (
-    ID_pedido int PRIMARY KEY,
+    ID_pedido int AUTO_INCREMENT PRIMARY KEY ,
     fk_Cliente_ID_cliente int,
     FOREIGN KEY (fk_Cliente_ID_cliente)
         REFERENCES Cliente (ID_cliente)
 );
 
 CREATE TABLE Comanda (
+    ID_Comanda int AUTO_INCREMENT PRIMARY KEY,
     ID_Mesa int,
     Valor_Faturamento double,
     fk_Cardapio_ID_itens int,
     fk_Pedido_ID_pedido int,
-    PRIMARY KEY (fk_Cardapio_ID_itens, fk_Pedido_ID_pedido),
     FOREIGN KEY (fk_Cardapio_ID_itens)
         REFERENCES Cardapio (ID_itens),
     FOREIGN KEY (fk_Pedido_ID_pedido)
@@ -58,7 +58,7 @@ CREATE TABLE Comanda (
 );
 
 CREATE TABLE Funcionario (
-    ID_funcionario int PRIMARY KEY,
+    ID_funcionario int AUTO_INCREMENT PRIMARY KEY,
     contato varchar(50),
     nome varchar(50),
     fk_Pedido_ID_pedido int,
