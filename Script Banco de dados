@@ -3,7 +3,7 @@ USE restaurante;
 
 
 CREATE TABLE Cardapio (
-    ID_itens INT PRIMARY KEY,
+    ID_itens INT PRIMARY KEY auto_increment,
     Categoria_item VARCHAR(20),
     Descricao_item VARCHAR(200),
     Preco_item DOUBLE,
@@ -36,12 +36,12 @@ INSERT INTO Cardapio (ID_itens, Categoria_item, Descricao_item, Preco_item, Nome
 
 
 CREATE TABLE Cliente (
-    ID_cliente INT PRIMARY KEY,
+    ID_cliente INT PRIMARY KEY auto_increment,
     Nome VARCHAR(50)
 );
 
 CREATE TABLE Restaurante (
-    ID_restaurante INT PRIMARY KEY,
+    ID_restaurante INT PRIMARY KEY auto_increment,
     Nome_dono VARCHAR(50),
     Contato VARCHAR(20)
 );
@@ -50,7 +50,7 @@ INSERT INTO Restaurante (ID_restaurante, Nome_dono, Contato) VALUES
 (1, 'Ana Pereira', '9888-5678');
 
 CREATE TABLE Mesa (
-    ID_mesa INT PRIMARY KEY,
+    ID_mesa INT PRIMARY KEY auto_increment,
     fk_Restaurante_ID_restaurante INT,
     FOREIGN KEY (fk_Restaurante_ID_restaurante) REFERENCES Restaurante(ID_restaurante)
 );
@@ -58,7 +58,7 @@ CREATE TABLE Mesa (
 
 
 CREATE TABLE Pedido (
-    ID_pedido INT PRIMARY KEY,
+    ID_pedido INT PRIMARY KEY auto_increment,
     fk_Mesa_ID_mesa INT,
     fk_Cliente_ID_cliente INT,
     FOREIGN KEY (fk_Mesa_ID_mesa) REFERENCES Mesa(ID_mesa) ON DELETE CASCADE,
@@ -67,7 +67,7 @@ CREATE TABLE Pedido (
 
 
 CREATE TABLE Comanda (
-    fk_Cardapio_ID_itens INT,
+    fk_Cardapio_ID_itens INT auto_increment,
     fk_Pedido_ID_pedido INT,
     PRIMARY KEY (fk_Cardapio_ID_itens, fk_Pedido_ID_pedido),
     FOREIGN KEY (fk_Cardapio_ID_itens) REFERENCES Cardapio(ID_itens),
