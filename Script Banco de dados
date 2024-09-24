@@ -46,7 +46,7 @@ CREATE TABLE Pedido (
 );
 
 CREATE TABLE Comanda (
-    ID_Comanda int AUTO_INCREMENT PRIMARY KEY,
+    ID_Comanda int not null,
     ID_Mesa int,
     Valor_Faturamento double,
     fk_Cardapio_ID_itens int,
