@@ -14,9 +14,11 @@ public class Main2 {
         int opcao;
 
         do {
+            System.out.println("--------------- RESTAURANTE FOGO NA BRASA ---------------");
             System.out.println("1 - Ver menu");
             System.out.println("2 - Criar cadastro");
             System.out.println("3 - Fazer pedido");
+            System.out.println("-".repeat(57));
             opcao = leitura.nextInt();
 
             switch (opcao){
@@ -49,20 +51,42 @@ public class Main2 {
                     break;
 
                 case 3:
-                        sql = "INSERT INTO pedido (fk_Mesa_ID_Mesa, fk_Cliente_ID_cliente) VALUES (?, ?)";
+
+                    String opcao1;
+                    int comanda = 1;
+
+                    do {
+                        System.out.println("Digite o item do cardápio que deseja inserir: ");
+                        int num = leitura.nextInt();
+
+                        sql = "insert into pedido (fk_Cliente_ID_cliente) values (?)";
                         smtm = conn.conectarBancoDeDados().prepareStatement(sql);
                         smtm.setInt(1, 1);
-                        smtm.setInt(2, 1);
                         smtm.execute();
 
-                        System.out.println("Qual o número do cardápio deseja adicionar?");
-                        int num = leitura.nextInt();
-                        sql = "INSERT INTO comanda (fk_Cardapio_ID_Itens, fk_Pedido_ID_pedido) VALUES (?, ?)";
-                        smtm = conn.conectarBancoDeDados().prepareStatement(sql);
-                        smtm.setInt(1, num);
-                        smtm.setInt(2, 1);
-                        smtm.execute();
-                        break;
+                        String sql2 = "insert into comanda (ID_Comanda, ID_mesa, Valor_Faturamento, fk_Cardapio_ID_itens, fk_Pedido_ID_pedido) values (?, ?, ?, ?, ?)";
+                        PreparedStatement smtm2 = conn.conectarBancoDeDados().prepareStatement(sql2);
+
+                        smtm2.setInt(1, comanda);
+                        smtm2.setInt(2, 1);
+                        smtm2.setInt(3, 500);
+                        smtm2.setInt(4, num);
+                        smtm2.setInt(5, 4);
+                        smtm2.execute();
+
+                        System.out.println("Deseja adicionar mais um pedido? (SIM/ NAO)");
+                        leitura.nextLine();
+                        opcao1 = leitura.nextLine();
+
+                        if (opcao1.equalsIgnoreCase("nao")) {
+                            comanda++; // Incrementar o ID da comanda para a próxima
+                            System.out.println("Nova comanda criada: " + comanda);
+                            break; // Encerra o loop
+                        }
+
+                    } while (opcao1.equalsIgnoreCase("sim"));
+
+                    break;
             }
 
         } while (opcao != 0);
