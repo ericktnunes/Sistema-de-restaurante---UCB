@@ -14,13 +14,15 @@ public class Main2 {
         int opcao;
 
         do {
-            System.out.println("--------------- RESTAURANTE FOGO NA BRASA ---------------");
-            System.out.println("1 - Ver menu");
+            System.out.println("\n--------------- RESTAURANTE FOGO NA BRASA ---------------");
+            System.out.println("1 - Ver cardápio");
             System.out.println("2 - Criar cadastro");
             System.out.println("3 - Fazer pedido");
             System.out.println("4 - Sair do Programa");
             System.out.println("-".repeat(57));
+            System.out.print("Digite o número da opção: ");
             opcao = leitura.nextInt();
+            System.out.println("*".repeat(57) + "\n\n\n");
 
             switch (opcao){
                 // Ver menu
@@ -30,6 +32,7 @@ public class Main2 {
                     smtm.execute();
                     ResultSet rs = smtm.executeQuery();
 
+                    System.out.println("\n--------------- CARDÁPIO FOGO NA BRASA ---------------");
                     while (rs.next()){
                         int idItens = rs.getInt("ID_itens");
                         String nome = rs.getString("Nome_item");
@@ -37,12 +40,16 @@ public class Main2 {
 
                         System.out.printf("Número: %d | Nome: %s | Preço: R$%.2f\n", idItens, nome, preco);
                     }
+                    System.out.println("-".repeat(57) + "\n\n\n");
+
                     break;
 
                 case 2:
-                    System.out.println("Digite seu nome: ");
+                    System.out.println("\n------------------ CADASTRO DE CLIENTE ------------------");
+                    System.out.print("Digite seu nome: ");
                     leitura.nextLine();
                     String nome = leitura.nextLine();
+                    System.out.println("*".repeat(57) + "\n\n\n");
 
                     sql = "insert into cliente (nome) values (?)";
                     smtm = conn.conectarBancoDeDados().prepareStatement(sql);
@@ -70,8 +77,10 @@ public class Main2 {
                         comanda = 1; // Se não houver nenhuma comanda, começa com 1
                     }
 
+                    System.out.println("\n------------------------ COMANDA ------------------------");
                     do {
-                        System.out.println("Digite o item do cardápio que deseja inserir: ");
+
+                        System.out.print("Digite o item do cardápio que deseja inserir: ");
                         int num = leitura.nextInt();
 
                         //SQL para consultar faturamento
@@ -118,16 +127,21 @@ public class Main2 {
 
 
                         //Pergurtando se o cliente deseja adicionar mais um item na sua comanda
-                        System.out.println("Deseja adicionar mais um pedido? (SIM/ NAO)");
+                        System.out.println("\nDeseja adicionar mais um pedido? (SIM/ NAO)");
                         leitura.nextLine();
                         opcao1 = leitura.nextLine();
+                        System.out.println("~".repeat(57) + "\n");
 
                         if (opcao1.equalsIgnoreCase("nao")) {
                             comanda++; // Incrementar o ID da comanda para a próxima
+                            System.out.println("\n\n");
                             break; // Encerra o loop
                         }
 
                     } while (opcao1.equalsIgnoreCase("sim"));
+
+                case 4:
+                    break;
 
                 //caso nenhuma opções do switch
                 default:
